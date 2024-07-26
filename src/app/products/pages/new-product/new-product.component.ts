@@ -39,7 +39,6 @@ export default class NewProductComponent implements OnInit {
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(10),
-        Validators.pattern('^[0-9]*$'),
       ]),
       name: [
         '',
@@ -82,14 +81,14 @@ export default class NewProductComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
-    if (this.registerForm.valid) {
-      console.log('Formulario válido', this.registerForm.value);
-      // Aquí puedes manejar el envío del formulario
-    } else {
-      console.log('Formulario no válido');
+  protected onSubmit(): void {
+    if (this.registerForm.invalid) {
       this.markAllAsTouched(this.registerForm);
+      return;
     }
+
+    const { ID } = this.registerForm.value;
+    console.log({ ID });
   }
 
   private markAllAsTouched(formGroup: FormGroup): void {
@@ -97,5 +96,9 @@ export default class NewProductComponent implements OnInit {
       const control = formGroup.get(field);
       control?.markAsTouched({ onlySelf: true });
     });
+  }
+
+  protected resetForm(): void {
+    this.registerForm.reset();
   }
 }
