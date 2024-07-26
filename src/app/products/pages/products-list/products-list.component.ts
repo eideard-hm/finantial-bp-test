@@ -10,7 +10,11 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 
 import { NavigationService } from '@services';
-import { DropdownComponent, PaginationComponent } from '@shared/components';
+import {
+  ButtonComponent,
+  DropdownComponent,
+  PaginationComponent,
+} from '@shared/components';
 import { ProductConsts } from '@shared/consts';
 import type { IDropdownOption } from '@shared/models';
 
@@ -19,7 +23,12 @@ import type { IDropdownOption } from '@shared/models';
   standalone: true,
   templateUrl: './products-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, DropdownComponent, PaginationComponent],
+  imports: [
+    ReactiveFormsModule,
+    DropdownComponent,
+    PaginationComponent,
+    ButtonComponent,
+  ],
 })
 export default class ProductsListComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);

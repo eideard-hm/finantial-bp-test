@@ -8,14 +8,14 @@ import {
 } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
-import { ModalComponent } from '@shared/components/modal/modal.component';
+import { ButtonComponent, ModalComponent } from '@shared/components';
 import { addYearsToDate, formatInputDate } from '@utils';
 
 @Component({
   selector: 'app-new-product',
   standalone: true,
   templateUrl: './new-product.component.html',
-  imports: [ReactiveFormsModule, RouterLink, ModalComponent],
+  imports: [ReactiveFormsModule, RouterLink, ModalComponent, ButtonComponent],
 })
 export default class NewProductComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
@@ -101,6 +101,7 @@ export default class NewProductComponent implements OnInit {
   }
 
   protected resetForm(): void {
+    console.log('reset');
     this.registerForm.reset();
   }
 }

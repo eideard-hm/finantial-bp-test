@@ -5,12 +5,15 @@ import {
   model,
 } from '@angular/core';
 
+import { ButtonComponent } from '../button/button.component';
+
 @Component({
   selector: 'app-modal',
   standalone: true,
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ButtonComponent],
 })
 export class ModalComponent {
   // inputs
