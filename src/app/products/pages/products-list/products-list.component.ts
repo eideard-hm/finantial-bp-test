@@ -8,6 +8,8 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 
+import { NavigationService } from '@services';
+
 @Component({
   selector: 'app-products-list',
   standalone: true,
@@ -17,6 +19,7 @@ import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 })
 export default class ProductsListComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
+  private readonly _navigationService = inject(NavigationService);
 
   protected searchControl = this._fb.control('');
 
@@ -35,5 +38,9 @@ export default class ProductsListComponent implements OnInit {
       .subscribe(searchValue => {
         console.log(searchValue);
       });
+  }
+
+  protected handleNewProduct() {
+    this._navigationService.navigateTo(['new-product']);
   }
 }

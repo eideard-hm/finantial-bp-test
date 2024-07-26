@@ -20,7 +20,12 @@
     "module": "ES2022",
     "lib": ["ES2022", "dom"],
     "paths": {
-      "@components/*": ["./src/app/components/*"]
+      "@shared/*": ["./src/app/shared/*"],
+      "@products/*": ["./src/app/products/*"],
+      "@env/*": ["./src/environments/*"],
+      "@services": ["./src/app/services"],
+      "@services/*": ["./src/app/services/*"],
+      "@utils": ["./src/app/utils"]
     }
   },
   "angularCompilerOptions": {
