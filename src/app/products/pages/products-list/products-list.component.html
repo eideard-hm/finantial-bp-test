@@ -3,7 +3,7 @@
   <div class="flex justify-between items-center w-full">
     <input
       type="text"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-2/6"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-1/4"
       placeholder="Search..."
       [formControl]="searchControl" />
 
@@ -37,18 +37,29 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="bg-white border-b hover:bg-gray-50 text-left">
-          <td class="px-6 py-4 text-center">White</td>
-          <td class="px-6 py-4">White</td>
-          <td class="px-6 py-4">White</td>
-          <td class="px-6 py-4">White</td>
-          <td class="px-6 py-4">White</td>
-          <td class="px-6 py-4">
-            <app-dropdown
-              icon="fa-ellipsis-vertical"
-              [options]="dropdownOptions()" />
-          </td>
-        </tr>
+        @for (product of dataSource(); track product.id) {
+          <tr class="bg-white border-b hover:bg-gray-50 text-left">
+            <td class="px-6 py-4 text-center">{{ product.logo }}</td>
+            <td class="px-6 py-4">{{ product.name }}</td>
+            <td class="px-6 py-4">{{ product.description }}</td>
+            <td class="px-6 py-4">{{ product.date_release }}</td>
+            <td class="px-6 py-4">{{ product.date_revision }}</td>
+            <td class="px-6 py-4">
+              <app-dropdown
+                icon="fa-ellipsis-vertical"
+                [options]="[
+                  {
+                    label: 'Editar Producto',
+                    value: '/edit-product/{{ product.id }}',
+                  },
+                ]" />
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="text-center py-4">No hay productos</td>
+          </tr>
+        }
       </tbody>
     </table>
   </div>
