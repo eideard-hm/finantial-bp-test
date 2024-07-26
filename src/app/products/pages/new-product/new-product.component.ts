@@ -10,6 +10,7 @@ import { RouterLink } from '@angular/router';
 
 import type { IFinancialData } from '@products/models';
 import { FinancialService } from '@products/services/financial.service';
+import { ModalService } from '@services';
 import { ButtonComponent, ModalComponent } from '@shared/components';
 import { addYearsToDate, formatInputDate } from '@utils';
 
@@ -21,10 +22,15 @@ import { addYearsToDate, formatInputDate } from '@utils';
 })
 export default class NewProductComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
+  private readonly _modalSvc = inject(ModalService);
   private readonly _financialSvc = inject(FinancialService);
 
   protected registerForm;
   protected isOpenModal = signal(false);
+  protected modalInfo = signal({
+    title: 'Crear Producto Financiero',
+    message: '¿ Esta seguro/a de crear el producto ?',
+  });
 
   get registerFormControls(): Record<string, AbstractControl> {
     return this.registerForm.controls;
@@ -92,7 +98,12 @@ export default class NewProductComponent implements OnInit {
       return;
     }
 
-    this.handleCreateProduct();
+    this.showConfirmationModal();
+    this._modalSvc.confirmation$.subscribe(isConfirmed => {
+      if (!isConfirmed) return;
+
+      this.handleCreateProduct();
+    });
   }
 
   private handleCreateProduct(): void {
@@ -101,6 +112,10 @@ export default class NewProductComponent implements OnInit {
     this._financialSvc.createProduct(data).subscribe(data => {
       console.log({ data });
     });
+  }
+
+  private showConfirmationModal() {
+    this.isOpenModal.set(true);
   }
 
   private mappedFormValues(): IFinancialData {

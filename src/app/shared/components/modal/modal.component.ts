@@ -1,11 +1,13 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  inject,
   input,
   model,
 } from '@angular/core';
 
 import { ButtonComponent } from '../button/button.component';
+import { ModalService } from '@services';
 
 @Component({
   selector: 'app-modal',
@@ -16,21 +18,22 @@ import { ButtonComponent } from '../button/button.component';
   imports: [ButtonComponent],
 })
 export class ModalComponent {
+  private readonly _modalSvc = inject(ModalService);
+
   // inputs
   title = input<string>();
   body = input.required<string>();
 
   // models
   isOpen = model(false);
-  isConfirmed = model(false);
 
   protected handleCancel() {
-    this.isConfirmed.set(false);
+    this._modalSvc.cancel();
     this.toggleModal(false);
   }
 
   protected handleConfirm() {
-    this.isConfirmed.set(true);
+    this._modalSvc.confirm();
     this.toggleModal(false);
   }
 

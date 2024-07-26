@@ -195,5 +195,8 @@
 </section>
 
 @defer {
-  <app-modal [(isOpen)]="isOpenModal" body="Esta seguro" title="Mutate" />
+  <app-modal
+    [(isOpen)]="isOpenModal"
+    [body]="modalInfo().message"
+    [title]="modalInfo().title" />
 }
