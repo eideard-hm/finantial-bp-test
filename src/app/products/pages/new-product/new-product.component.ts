@@ -1,4 +1,3 @@
-import { JsonPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import {
   type AbstractControl,
@@ -7,6 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 import { addYearsToDate, formatInputDate } from '@utils';
 
@@ -14,7 +14,7 @@ import { addYearsToDate, formatInputDate } from '@utils';
   selector: 'app-new-product',
   standalone: true,
   templateUrl: './new-product.component.html',
-  imports: [ReactiveFormsModule, JsonPipe],
+  imports: [ReactiveFormsModule, RouterLink],
 })
 export default class NewProductComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
