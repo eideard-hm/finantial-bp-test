@@ -10,7 +10,7 @@ import { RouterLink } from '@angular/router';
 
 import type { IFinancialData } from '@products/models';
 import { FinancialService } from '@products/services/financial.service';
-import { ModalService } from '@services';
+import { ModalService, NavigationService } from '@services';
 import { ButtonComponent, ModalComponent } from '@shared/components';
 import { addYearsToDate, formatInputDate } from '@utils';
 
@@ -24,6 +24,7 @@ export default class NewProductComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
   private readonly _modalSvc = inject(ModalService);
   private readonly _financialSvc = inject(FinancialService);
+  private readonly _navigationSvc = inject(NavigationService);
 
   protected registerForm;
   protected isOpenModal = signal(false);
@@ -142,5 +143,10 @@ export default class NewProductComponent implements OnInit {
   protected resetForm(): void {
     console.log('reset');
     this.registerForm.reset();
+  }
+
+  private redirectToList(): void {
+    this.resetForm();
+    this._navigationSvc.navigateTo(['/']);
   }
 }

@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 
-import { map, type Observable } from 'rxjs';
+import { catchError, map, type Observable } from 'rxjs';
 
 import type { IFinancialData, IFinancialResponse } from '@products/models';
-import { BankHttpService } from '@services';
+import { BankHttpService, HandleHttpErrorsService } from '@services';
 
 /**
  * Servicio para obtener los datos financieros de un usuario.
@@ -13,15 +13,23 @@ import { BankHttpService } from '@services';
 })
 export class FinancialService {
   private readonly _http = inject(BankHttpService);
+  private readonly _handleHttpErrorsSvc = inject(HandleHttpErrorsService);
 
   /**
    * Obtiene los datos financieros de un usuario.
    * @returns
    */
   retrieveFinancialData(): Observable<IFinancialData[]> {
-    return this._http
-      .get<IFinancialResponse>('products')
-      .pipe(map(response => response.data));
+    return this._http.get<IFinancialResponse>('products').pipe(
+      map(response => response.data),
+      catchError(err =>
+        this._handleHttpErrorsSvc.handleHttpError(
+          'No se pudo obtener los productos financieros',
+          [],
+          err
+        )
+      )
+    );
   }
 
   retrieveFinancialDataById(id: number): Observable<IFinancialData> {
