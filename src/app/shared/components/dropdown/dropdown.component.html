@@ -1,0 +1,15 @@
+<div class="dropdown-container">
+  <button (click)="toggleDropdown()" type="button">
+    @if (icon()) {
+      <i class="fa-solid fa-regular {{ icon() }} mr-3"></i>
+    }
+    {{ label() }}
+  </button>
+  @if (isOpen()) {
+    <div class="dropdown-content rounded-lg py-3 divide-y">
+      @for (option of options(); track $index) {
+        <a [routerLink]="option.value" class="pl-3">{{ option.label }}</a>
+      }
+    </div>
+  }
+</div>
