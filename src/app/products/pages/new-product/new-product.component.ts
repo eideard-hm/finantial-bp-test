@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import {
   type AbstractControl,
   FormBuilder,
@@ -8,18 +8,20 @@ import {
 } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
+import { ModalComponent } from '@shared/components/modal/modal.component';
 import { addYearsToDate, formatInputDate } from '@utils';
 
 @Component({
   selector: 'app-new-product',
   standalone: true,
   templateUrl: './new-product.component.html',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, ModalComponent],
 })
 export default class NewProductComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
 
   protected registerForm;
+  protected isOpenModal = signal(false);
 
   get registerFormControls(): Record<string, AbstractControl> {
     return this.registerForm.controls;

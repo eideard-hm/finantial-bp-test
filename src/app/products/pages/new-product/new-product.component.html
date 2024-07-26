@@ -177,9 +177,9 @@
 
       <footer class="flex justify-center gap-7 flex-wrap">
         <button
-          type="button"
+          type="reset"
           class="text-black bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-          (click)="resetForm()">
+          (click)="isOpenModal.set(true)">
           <i class="fa-solid fa-rotate-right mr-3"></i>
           Reiniciar
         </button>
@@ -194,3 +194,7 @@
     </form>
   </article>
 </section>
+
+@defer {
+  <app-modal [(isOpen)]="isOpenModal" body="Esta seguro" title="Mutate" />
+}

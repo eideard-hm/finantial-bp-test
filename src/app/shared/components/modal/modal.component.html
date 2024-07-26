@@ -1,0 +1,19 @@
+@if (isOpen()) {
+  <section class="flex h-dvh w-dvw justify-center items-center">
+    <div class="modal">
+      <header>
+        <h3>{{ title() }}</h3>
+      </header>
+
+      <section>
+        <p>{{ body() }}</p>
+      </section>
+
+      <hr />
+      <footer class="flex items-start justify-normal flex-wrap">
+        <button (click)="handleCancel()">Cancelar</button>
+        <button (click)="handleConfirm()">Confirmar</button>
+      </footer>
+    </div>
+  </section>
+}
