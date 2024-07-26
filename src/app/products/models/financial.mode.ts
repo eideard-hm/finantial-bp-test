@@ -9,4 +9,5 @@ export interface IFinancialData {
 
 export interface IFinancialResponse {
   data: IFinancialData[];
+  message: string;
 }

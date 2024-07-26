@@ -1,16 +1,14 @@
-import { createExpressServer } from "routing-controllers";
+import { createExpressServer } from 'routing-controllers';
 import 'dotenv/config';
 
-let PORT = 3002;
+const PORT = 3002;
 
 // creates express app, registers all controller routes and returns you express app instance
 const app = createExpressServer({
-  //cors: true,
-  routePrefix: "/bp", 
+  cors: true,
+  routePrefix: '/bp',
 
-  controllers: [
-    __dirname + "/controllers/*{.js,.ts}",
-  ], // we specify controllers we want to use
+  controllers: [__dirname + '/controllers/*{.js,.ts}'], // we specify controllers we want to use
 });
 
 // run express application on port 3000

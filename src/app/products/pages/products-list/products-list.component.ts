@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, TitleCasePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -28,6 +28,7 @@ import type { IDropdownOption } from '@shared/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DatePipe,
+    TitleCasePipe,
     ReactiveFormsModule,
     DropdownComponent,
     PaginationComponent,
@@ -38,6 +39,7 @@ export default class ProductsListComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
   private readonly _navigationService = inject(NavigationService);
   private readonly _financialSvc = inject(FinancialService);
+  private dataSourceBackup: IFinancialData[] = [];
 
   protected searchControl = this._fb.control('');
   protected dataSource = signal<IFinancialData[]>([]);
@@ -51,9 +53,10 @@ export default class ProductsListComponent implements OnInit {
   }
 
   private retrieveProducts(): void {
-    this._financialSvc
-      .retrieveFinancialData()
-      .subscribe(products => this.dataSource.set(products));
+    this._financialSvc.retrieveFinancialData().subscribe(products => {
+      this.dataSourceBackup = products;
+      this.dataSource.set(products);
+    });
   }
 
   private listenToSearchControlChanges(): void {
@@ -64,12 +67,24 @@ export default class ProductsListComponent implements OnInit {
         filter(value => !!value),
         map(value => value?.trim().toLocaleLowerCase() ?? '')
       )
-      .subscribe(searchValue => {
-        console.log(searchValue);
-      });
+      .subscribe(searchValue => this.filterBySearchValue(searchValue));
+  }
+
+  private filterBySearchValue(searchValue: string): void {
+    const filteredProducts = this.dataSourceBackup.filter(
+      product =>
+        product.name.toLocaleLowerCase().includes(searchValue) ||
+        product.description.toLocaleLowerCase().includes(searchValue)
+    );
+
+    this.dataSource.set(filteredProducts);
   }
 
   protected handleNewProduct() {
     this._navigationService.navigateTo(['new-product']);
+  }
+
+  protected buildEditUrl(id: string): string {
+    return `edit-product/${id}`;
   }
 }

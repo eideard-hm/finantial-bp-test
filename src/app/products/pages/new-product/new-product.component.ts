@@ -8,6 +8,8 @@ import {
 } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
+import type { IFinancialData } from '@products/models';
+import { FinancialService } from '@products/services/financial.service';
 import { ButtonComponent, ModalComponent } from '@shared/components';
 import { addYearsToDate, formatInputDate } from '@utils';
 
@@ -19,6 +21,7 @@ import { addYearsToDate, formatInputDate } from '@utils';
 })
 export default class NewProductComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
+  private readonly _financialSvc = inject(FinancialService);
 
   protected registerForm;
   protected isOpenModal = signal(false);
@@ -37,7 +40,7 @@ export default class NewProductComponent implements OnInit {
 
   private setupRegisterForm() {
     return this._fb.group({
-      ID: this._fb.control<number | null>(null, [
+      ID: this._fb.control<string | null>(null, [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(10),
@@ -46,7 +49,7 @@ export default class NewProductComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(5),
+          Validators.minLength(6),
           Validators.maxLength(100),
         ],
       ],
@@ -89,8 +92,29 @@ export default class NewProductComponent implements OnInit {
       return;
     }
 
-    const { ID } = this.registerForm.value;
-    console.log({ ID });
+    this.handleCreateProduct();
+  }
+
+  private handleCreateProduct(): void {
+    const data = this.mappedFormValues();
+
+    this._financialSvc.createProduct(data).subscribe(data => {
+      console.log({ data });
+    });
+  }
+
+  private mappedFormValues(): IFinancialData {
+    const { ID, name, description, logo, releaseDate, revisionDate } =
+      this.registerForm.value;
+
+    return {
+      id: ID ?? '',
+      name: name ?? '',
+      description: description ?? '',
+      logo: logo ?? '',
+      date_release: releaseDate ? new Date(releaseDate) : new Date(),
+      date_revision: revisionDate ? new Date(revisionDate) : new Date(),
+    };
   }
 
   private markAllAsTouched(formGroup: FormGroup): void {

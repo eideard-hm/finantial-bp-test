@@ -39,18 +39,31 @@
       <tbody>
         @for (product of dataSource(); track product.id) {
           <tr class="bg-white border-b hover:bg-gray-50 text-left">
-            <td class="px-6 py-4 text-center">{{ product.logo }}</td>
-            <td class="px-6 py-4">{{ product.name }}</td>
+            <td class="px-6 py-4 flex justify-center items-center">
+              <a [href]="product.logo" target="_blank">
+                <img
+                  [width]="40"
+                  [height]="40"
+                  class="size-10 rounded-full"
+                  [src]="product.logo"
+                  [alt]="product.name" />
+              </a>
+            </td>
+            <td class="px-6 py-4">{{ product.name | titlecase }}</td>
             <td class="px-6 py-4">{{ product.description }}</td>
-            <td class="px-6 py-4">{{ product.date_release }}</td>
-            <td class="px-6 py-4">{{ product.date_revision }}</td>
+            <td class="px-6 py-4">
+              {{ product.date_release | date: 'dd/MM/yyyy' }}
+            </td>
+            <td class="px-6 py-4">
+              {{ product.date_revision | date: 'dd/MM/yyyy' }}
+            </td>
             <td class="px-6 py-4">
               <app-dropdown
                 icon="fa-ellipsis-vertical"
                 [options]="[
                   {
                     label: 'Editar Producto',
-                    value: '/edit-product/{{ product.id }}',
+                    value: buildEditUrl(product.id),
                   },
                 ]" />
             </td>
