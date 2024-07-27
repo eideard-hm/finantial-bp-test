@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 import type { IFinancialData } from '@products/models';
 import { FinancialService } from '@products/services/financial.service';
@@ -19,7 +19,6 @@ import {
   PaginationComponent,
 } from '@shared/components';
 import { ProductConsts } from '@shared/consts';
-import type { IDropdownOption } from '@shared/models';
 
 @Component({
   selector: 'app-products-list',
@@ -41,11 +40,9 @@ export default class ProductsListComponent implements OnInit {
   private readonly _financialSvc = inject(FinancialService);
   private dataSourceBackup: IFinancialData[] = [];
 
+  protected elementsPerPage = ProductConsts.DEFAULT_ELEMENTS_PER_PAGE;
   protected searchControl = this._fb.control('');
   protected dataSource = signal<IFinancialData[]>([]);
-  protected readonly dropdownOptions = signal<IDropdownOption[]>([
-    { label: 'New Product', value: 'new-product' },
-  ]);
 
   ngOnInit(): void {
     this.retrieveProducts();
@@ -55,7 +52,7 @@ export default class ProductsListComponent implements OnInit {
   private retrieveProducts(): void {
     this._financialSvc.retrieveFinancialData().subscribe(products => {
       this.dataSourceBackup = products;
-      this.dataSource.set(products);
+      this.dataSource.set(products.slice(0, this.elementsPerPage));
     });
   }
 
@@ -64,7 +61,6 @@ export default class ProductsListComponent implements OnInit {
       .pipe(
         debounceTime(ProductConsts.SEARCH_DEBOUNCE_TIME),
         distinctUntilChanged(),
-        filter(value => !!value),
         map(value => value?.trim().toLocaleLowerCase() ?? '')
       )
       .subscribe(searchValue => this.filterBySearchValue(searchValue));
@@ -77,7 +73,8 @@ export default class ProductsListComponent implements OnInit {
         product.description.toLocaleLowerCase().includes(searchValue)
     );
 
-    this.dataSource.set(filteredProducts);
+    const sliceProducts = filteredProducts.slice(0, this.elementsPerPage);
+    this.dataSource.set(sliceProducts);
   }
 
   protected handleNewProduct() {
@@ -86,5 +83,16 @@ export default class ProductsListComponent implements OnInit {
 
   protected buildEditUrl(id: string): string {
     return `edit-product/${id}`;
+  }
+
+  protected getDate(date: string): Date {
+    const [dateValue] = date.split('T');
+    const [year, month, day] = dateValue.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  }
+
+  protected handleElementsPerPageChage(value: number): void {
+    this.elementsPerPage = value;
+    this.dataSource.set(this.dataSourceBackup.slice(0, value));
   }
 }

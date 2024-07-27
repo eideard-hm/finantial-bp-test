@@ -190,7 +190,7 @@
         <app-button
           type="submit"
           color="primary"
-          label="Registrar"
+          [label]="action()"
           icon="fa-save"
           [disabled]="!registerForm.valid" />
       </footer>

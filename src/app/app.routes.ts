@@ -15,7 +15,7 @@ export const routes: Routes = [
     title: 'Crear Producto financiero',
   },
   {
-    path: 'edit-product/:id',
+    path: 'edit-product/:productId',
     loadComponent: () =>
       import('./products/pages/new-product/new-product.component'),
     title: 'Editar Producto financiero',

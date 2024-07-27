@@ -52,10 +52,10 @@
             <td class="px-6 py-4">{{ product.name | titlecase }}</td>
             <td class="px-6 py-4">{{ product.description }}</td>
             <td class="px-6 py-4">
-              {{ product.date_release | date: 'dd/MM/yyyy' }}
+              {{ getDate(product.date_release) | date: 'dd/MM/yyyy' }}
             </td>
             <td class="px-6 py-4">
-              {{ product.date_revision | date: 'dd/MM/yyyy' }}
+              {{ getDate(product.date_revision) | date: 'dd/MM/yyyy' }}
             </td>
             <td class="px-6 py-4">
               <app-dropdown
@@ -79,6 +79,8 @@
 
   <!-- pagination -->
   <div class="w-full">
-    <app-pagination [dataSourceLen]="dataSource().length" />
+    <app-pagination
+      [dataSourceLen]="dataSource().length"
+      (elementPerPageChange)="handleElementsPerPageChage($event)" />
   </div>
 </section>

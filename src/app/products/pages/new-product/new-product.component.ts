@@ -1,4 +1,13 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  OnInit,
+  signal,
+  untracked,
+} from '@angular/core';
 import {
   type AbstractControl,
   FormBuilder,
@@ -27,12 +36,16 @@ export default class NewProductComponent implements OnInit {
   private readonly _financialSvc = inject(FinancialService);
   private readonly _navigationSvc = inject(NavigationService);
 
+  // imputs
+  productId = input<string>();
+
   protected registerForm;
   protected isOpenModal = signal(false);
-  protected modalInfo = signal({
-    title: 'Crear Producto Financiero',
-    message: '¿ Esta seguro/a de crear el producto ?',
-  });
+  protected action = signal<PageAction>('Registrar');
+  protected modalInfo = computed(() => ({
+    title: `${this.action()} Producto Financiero`,
+    message: `¿ Esta seguro/a de ${this.action()} el producto ?`,
+  }));
 
   get registerFormControls(): Record<string, AbstractControl> {
     return this.registerForm.controls;
@@ -40,6 +53,11 @@ export default class NewProductComponent implements OnInit {
 
   constructor() {
     this.registerForm = this.setupRegisterForm();
+
+    effect(() => {
+      const productId = this.productId();
+      untracked(() => this.handleActionType(productId));
+    });
   }
 
   ngOnInit(): void {
@@ -61,7 +79,7 @@ export default class NewProductComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(5),
+          Validators.minLength(6),
           Validators.maxLength(100),
         ],
       ],
@@ -83,6 +101,34 @@ export default class NewProductComponent implements OnInit {
         [Validators.required],
       ],
     });
+  }
+
+  private handleActionType(productId?: string) {
+    if (typeof productId !== 'string') return;
+
+    this.action.set('Actualizar');
+    this.retriveProductData(productId);
+  }
+
+  private retriveProductData(productId: string): void {
+    this._financialSvc.retrieveFinancialDataById(productId).subscribe(data => {
+      if (data) {
+        this.fillFormValues(data);
+      }
+    });
+  }
+
+  private fillFormValues(data: IFinancialData): void {
+    this.registerForm.patchValue({
+      ID: data.id,
+      name: data.name,
+      description: data.description,
+      logo: data.logo,
+      releaseDate: formatInputDate(new Date(data.date_release)),
+      revisionDate: formatInputDate(new Date(data.date_revision)),
+    });
+
+    this.registerForm.get('ID')?.disable();
   }
 
   private listenReleaseDateChanges(): void {
@@ -108,7 +154,11 @@ export default class NewProductComponent implements OnInit {
     this._modalSvc.confirmation$.subscribe(isConfirmed => {
       if (!isConfirmed) return;
 
-      this.handleCreateProduct();
+      if (this.action() === 'Registrar') {
+        this.handleCreateProduct();
+      } else {
+        this.handleEditProduct();
+      }
     });
   }
 
@@ -122,21 +172,37 @@ export default class NewProductComponent implements OnInit {
     });
   }
 
+  private handleEditProduct() {
+    const data = this.mappedFormValues();
+
+    this._financialSvc.updateProduct(data.id, data).subscribe(data => {
+      if (data) {
+        this.redirectToList();
+      }
+    });
+  }
+
   private showConfirmationModal() {
     this.isOpenModal.set(true);
   }
 
   private mappedFormValues(): IFinancialData {
     const { ID, name, description, logo, releaseDate, revisionDate } =
-      this.registerForm.value;
+      this.registerForm.getRawValue();
+
+    console.log({ releaseDate, revisionDate });
 
     return {
       id: ID ?? '',
       name: name ?? '',
       description: description ?? '',
       logo: logo ?? '',
-      date_release: releaseDate ? new Date(releaseDate) : new Date(),
-      date_revision: revisionDate ? new Date(revisionDate) : new Date(),
+      date_release: releaseDate
+        ? new Date(releaseDate).toISOString()
+        : new Date().toISOString(),
+      date_revision: revisionDate
+        ? new Date(revisionDate).toISOString()
+        : new Date().toISOString(),
     };
   }
 
@@ -148,7 +214,6 @@ export default class NewProductComponent implements OnInit {
   }
 
   protected resetForm(): void {
-    console.log('reset');
     this.registerForm.reset();
   }
 
@@ -157,3 +222,5 @@ export default class NewProductComponent implements OnInit {
     this._navigationSvc.navigateTo(['/']);
   }
 }
+
+type PageAction = 'Registrar' | 'Actualizar';

@@ -2,7 +2,11 @@ import { inject, Injectable } from '@angular/core';
 
 import { catchError, map, tap, type Observable } from 'rxjs';
 
-import type { IFinancialData, IFinancialResponse } from '@products/models';
+import type {
+  IDataUpdateProduct,
+  IFinancialData,
+  IFinancialResponse,
+} from '@products/models';
 import {
   BankHttpService,
   HandleHttpErrorsService,
@@ -39,7 +43,7 @@ export class FinancialService {
       );
   }
 
-  retrieveFinancialDataById(id: number): Observable<boolean> {
+  productIdExists(id: number): Observable<boolean> {
     return this._http
       .get<boolean>(`products/verification/${id}`)
       .pipe(
@@ -82,6 +86,56 @@ export class FinancialService {
         catchError(err =>
           this._handleHttpErrorsSvc.handleHttpError(
             'No se pudo crear el producto. Por favor verifique los datos ingresados.',
+            undefined,
+            err
+          )
+        )
+      );
+  }
+
+  /**
+   * Actualiza un producto.
+   * @param productId
+   * @param data
+   * @returns
+   */
+  updateProduct(
+    productId: string,
+    data: IDataUpdateProduct
+  ): Observable<IFinancialResponse<IDataUpdateProduct> | undefined> {
+    return this._http
+      .put<
+        IDataUpdateProduct,
+        IFinancialResponse<IDataUpdateProduct>
+      >(`products/${productId}`, data)
+      .pipe(
+        tap(data => {
+          this._toastSvc.showAlert('success', data.message);
+        }),
+        catchError(err =>
+          this._handleHttpErrorsSvc.handleHttpError(
+            'No se pudo actualizar el producto. Por favor verifique los datos ingresados.',
+            undefined,
+            err
+          )
+        )
+      );
+  }
+
+  /**
+   * Obtiene los datos financieros de un producto por id.
+   * @param productId
+   * @returns
+   */
+  retrieveFinancialDataById(
+    productId: string
+  ): Observable<IFinancialData | undefined> {
+    return this._http
+      .get<IFinancialData>(`products/${productId}`)
+      .pipe(
+        catchError(err =>
+          this._handleHttpErrorsSvc.handleHttpError(
+            `No se pudo obtener el producto con id ${productId}`,
             undefined,
             err
           )

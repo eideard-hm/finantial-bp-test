@@ -16,7 +16,7 @@ export function asyncIdValidator(
       return of(null);
     }
     return financialSvc
-      .retrieveFinancialDataById(control.value)
+      .productIdExists(control.value)
       .pipe(map(existsId => (existsId ? { existsID: true } : null)));
   };
 }
