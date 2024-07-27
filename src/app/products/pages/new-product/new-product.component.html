@@ -54,6 +54,10 @@
                   }}
                   caracteres.
                 }
+
+                @if (registerFormControls['ID'].errors['existsID']) {
+                  El ID ya existe. Por favor, ingrese otro.
+                }
               </span>
             </p>
           }

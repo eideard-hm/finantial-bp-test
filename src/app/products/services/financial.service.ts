@@ -39,8 +39,18 @@ export class FinancialService {
       );
   }
 
-  retrieveFinancialDataById(id: number): Observable<IFinancialData> {
-    return this._http.get<IFinancialData>(`products/${id}`);
+  retrieveFinancialDataById(id: number): Observable<boolean> {
+    return this._http
+      .get<boolean>(`products/verification/${id}`)
+      .pipe(
+        catchError(err =>
+          this._handleHttpErrorsSvc.handleHttpError(
+            `No se pudo recuperar el producto con id ${id}`,
+            false,
+            err
+          )
+        )
+      );
   }
 
   /**

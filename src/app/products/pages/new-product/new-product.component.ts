@@ -13,6 +13,7 @@ import { FinancialService } from '@products/services/financial.service';
 import { ModalService, NavigationService } from '@services';
 import { ButtonComponent, ModalComponent } from '@shared/components';
 import { addYearsToDate, formatInputDate } from '@utils';
+import { asyncIdValidator } from '@validators';
 
 @Component({
   selector: 'app-new-product',
@@ -47,11 +48,15 @@ export default class NewProductComponent implements OnInit {
 
   private setupRegisterForm() {
     return this._fb.group({
-      ID: this._fb.control<string | null>(null, [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(10),
-      ]),
+      ID: this._fb.control<string | null>(null, {
+        validators: [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(10),
+        ],
+        asyncValidators: [asyncIdValidator(this._financialSvc)],
+        updateOn: 'blur',
+      }),
       name: [
         '',
         [

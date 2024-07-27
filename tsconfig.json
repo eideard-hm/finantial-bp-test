@@ -25,7 +25,8 @@
       "@env/*": ["./src/environments/*"],
       "@services": ["./src/app/services"],
       "@services/*": ["./src/app/services/*"],
-      "@utils": ["./src/app/utils"]
+      "@utils": ["./src/app/utils"],
+      "@validators": ["./src/app/validators"]
     }
   },
   "angularCompilerOptions": {
