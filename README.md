@@ -1,27 +1,98 @@
-# FrontendBp
+# Proyecto Angular con Signals y Arquitectura Limpia
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.2.
+Este proyecto es una aplicación desarrollada con Angular versión 18.1.2. Utiliza señales (signals) y sigue los principios de arquitectura limpia y componetización.
 
-## Development server
+## Tabla de Contenidos
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- [Descripción](#descripción)
+- [Características](#características)
+- [Requisitos Previos](#requisitos-previos)
+- [Instalación](#instalación)
+- [Uso](#uso)
 
-## Code scaffolding
+## Descripción
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Esta aplicación es un ejemplo de cómo estructurar un proyecto Angular utilizando señales para la gestión de estado, y aplicando los principios de arquitectura limpia y componetización.
 
-## Build
+## Características
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- Angular 18.1.2
+- Uso de Signals para gestión de estado
+- Arquitectura limpia
+- Alta componetización
 
-## Running unit tests
+## Requisitos Previos
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Asegúrate de tener instalado lo siguiente en tu máquina:
 
-## Running end-to-end tests
+- Node.js (>= 14.0.0)
+- npm (>= 6.0.0) o yarn (>= 1.0.0)
+- Angular CLI (opcional, pero recomendado para desarrollo)
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Instalación
 
-## Further help
+1. Clona este repositorio:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```bash
+git https://github.com/eideard-hm/finantial-bp-test
+cd finantial-bp-test
+```
+
+## Uso
+
+Para ejecutar la aplicación, sigue estos pasos:
+
+### 1. Instalar Dependencias
+
+Primero, asegúrate de instalar todas las dependencias necesarias para el correcto funcionamiento del cliente y el servidor.
+
+```bash
+# Instalar dependencias del cliente
+npm install
+# o si prefieres yarn
+yarn install
+# o si prefieres pnpm
+pnpm install
+```
+
+### 2. Configurar el servidor backend
+
+```bash
+cd server
+
+# Instalar dependencias
+npm install
+# o si prefieres yarn
+yarn install
+# o si prefieres pnpm
+pnpm install
+
+# Levantar el servidor backend
+npm run start:dev
+# o si prefieres yarn
+yarn start:dev
+# o si prefieres pnpm
+pnpm start:dev
+```
+
+### 3. Ejecutar el proyecto del cliente
+
+```bash
+# Ejecutar el servidor del ciente
+npm run start
+# o si prefieres yarn
+yarn start
+# o si prefieres pnpm
+pnpm start
+```
+
+### 3. Ejecutar pruebas
+
+```bash
+# Ejecutar los test con jest
+npm run test
+# o si prefieres yarn
+yarn test
+# o si prefieres pnpm
+pnpm test
+```
