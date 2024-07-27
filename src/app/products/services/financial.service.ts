@@ -6,6 +6,7 @@ import type {
   IDataUpdateProduct,
   IFinancialData,
   IFinancialResponse,
+  ResponseWithMessage,
 } from '@products/models';
 import {
   BankHttpService,
@@ -141,5 +142,22 @@ export class FinancialService {
           )
         )
       );
+  }
+
+  deleteProduct(
+    productId: string
+  ): Observable<ResponseWithMessage | undefined> {
+    return this._http.delete<ResponseWithMessage>(`products/${productId}`).pipe(
+      tap(data => {
+        this._toastSvc.showAlert('info', data.message);
+      }),
+      catchError(err =>
+        this._handleHttpErrorsSvc.handleHttpError(
+          'No se pudo eliminar el producto',
+          undefined,
+          err
+        )
+      )
+    );
   }
 }

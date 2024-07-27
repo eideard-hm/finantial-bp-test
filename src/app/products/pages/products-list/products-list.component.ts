@@ -8,17 +8,19 @@ import {
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
-import { debounceTime, distinctUntilChanged, map } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, tap } from 'rxjs';
 
 import type { IFinancialData } from '@products/models';
 import { FinancialService } from '@products/services/financial.service';
-import { NavigationService } from '@services';
+import { ModalService, NavigationService } from '@services';
 import {
   ButtonComponent,
   DropdownComponent,
+  ModalComponent,
   PaginationComponent,
 } from '@shared/components';
 import { ProductConsts } from '@shared/consts';
+import type { IDropdownOption } from '@shared/models';
 
 @Component({
   selector: 'app-products-list',
@@ -32,17 +34,26 @@ import { ProductConsts } from '@shared/consts';
     DropdownComponent,
     PaginationComponent,
     ButtonComponent,
+    ModalComponent,
   ],
 })
 export default class ProductsListComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
   private readonly _navigationService = inject(NavigationService);
   private readonly _financialSvc = inject(FinancialService);
-  private dataSourceBackup: IFinancialData[] = [];
+  private readonly _modalSvc = inject(ModalService);
 
+  private dataSourceBackup: IFinancialData[] = [];
+  private _modalInfoMessage = `¿ Esta seguro/a de eliminar el producto:`;
+
+  protected isOpenModal = signal(false);
   protected elementsPerPage = ProductConsts.DEFAULT_ELEMENTS_PER_PAGE;
   protected searchControl = this._fb.control('');
   protected dataSource = signal<IFinancialData[]>([]);
+  protected modalInfo = signal({
+    title: `Eliminar Producto Financiero`,
+    message: this._modalInfoMessage,
+  });
 
   ngOnInit(): void {
     this.retrieveProducts();
@@ -81,10 +92,6 @@ export default class ProductsListComponent implements OnInit {
     this._navigationService.navigateTo(['new-product']);
   }
 
-  protected buildEditUrl(id: string): string {
-    return `edit-product/${id}`;
-  }
-
   protected getDate(date: string): Date {
     const [dateValue] = date.split('T');
     const [year, month, day] = dateValue.split('-').map(Number);
@@ -94,5 +101,42 @@ export default class ProductsListComponent implements OnInit {
   protected handleElementsPerPageChage(value: number): void {
     this.elementsPerPage = value;
     this.dataSource.set(this.dataSourceBackup.slice(0, value));
+  }
+
+  private handleDeleteProduct(id: string): void {
+    this.modalInfo.update(prev => ({
+      ...prev,
+      message: `${prev.message} ${id} ?`,
+    }));
+    this.isOpenModal.set(true);
+
+    this._modalSvc.confirmation$.subscribe(isConfirmed => {
+      if (!isConfirmed) return;
+
+      this._financialSvc
+        .deleteProduct(id)
+        .pipe(
+          tap(() =>
+            this.modalInfo.update(prev => ({
+              ...prev,
+              message: this._modalInfoMessage,
+            }))
+          )
+        )
+        .subscribe(message => message && this.retrieveProducts());
+    });
+  }
+
+  protected buildDropdownOptions(productId: string): IDropdownOption[] {
+    return [
+      {
+        label: 'Editar Producto',
+        value: `edit-product/${productId}`,
+      },
+      {
+        label: 'Eliminar Producto',
+        callback: () => this.handleDeleteProduct(productId),
+      },
+    ];
   }
 }

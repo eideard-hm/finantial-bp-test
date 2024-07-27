@@ -60,12 +60,7 @@
             <td class="px-6 py-4">
               <app-dropdown
                 icon="fa-ellipsis-vertical"
-                [options]="[
-                  {
-                    label: 'Editar Producto',
-                    value: buildEditUrl(product.id),
-                  },
-                ]" />
+                [options]="buildDropdownOptions(product.id)" />
             </td>
           </tr>
         } @empty {
@@ -84,3 +79,10 @@
       (elementPerPageChange)="handleElementsPerPageChage($event)" />
   </div>
 </section>
+
+@defer {
+  <app-modal
+    [(isOpen)]="isOpenModal"
+    [body]="modalInfo().message"
+    [title]="modalInfo().title" />
+}

@@ -8,7 +8,13 @@
   @if (isOpen()) {
     <div class="dropdown-content rounded-lg py-3 divide-y">
       @for (option of options(); track $index) {
-        <a [routerLink]="option.value" class="pl-3">{{ option.label }}</a>
+        @if (option.value) {
+          <a [routerLink]="option.value" class="pl-3">{{ option.label }}</a>
+        } @else {
+          <button class="pl-3" (click)="option?.callback()">
+            {{ option.label }}
+          </button>
+        }
       }
     </div>
   }

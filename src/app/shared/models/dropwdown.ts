@@ -1,4 +1,5 @@
 export interface IDropdownOption {
   label: string;
-  value: string;
+  value?: string;
+  callback?: () => void;
 }

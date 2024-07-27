@@ -13,3 +13,5 @@ export interface IFinancialResponse<T> {
 }
 
 export type IDataUpdateProduct = Omit<IFinancialData, 'id'>;
+
+export type ResponseWithMessage = Omit<IFinancialResponse<unknown>, 'data'>;
