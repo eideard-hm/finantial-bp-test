@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import ProductsListComponent from './products-list.component';
-import { FinancialService } from '@products/services/financial.service'; // Asegúrate de que la ruta sea correcta
-import { NavigationService } from '@services/navigation.service'; // Asegúrate de que la ruta sea correcta
+import { FinancialService } from '@products/services/financial.service';
+import { NavigationService } from '@services/navigation.service';
 import { of } from 'rxjs';
 import type { IFinancialData } from '@products/models';
 
@@ -50,15 +50,15 @@ describe('ProductsListComponent', () => {
   });
 
   it('should retrieve products on init', () => {
-    component.ngOnInit(); // Llama al método ngOnInit
-    expect(financialService.retrieveFinancialData).toHaveBeenCalled(); // Verifica que se haya llamado a la función
-    fixture.detectChanges(); // Detecta cambios en el fixture
-    expect(component.dataSource().length).toBe(1); // Verifica que se recuperen 1 producto
+    component.ngOnInit();
+    expect(financialService.retrieveFinancialData).toHaveBeenCalled();
+    fixture.detectChanges();
+    expect(component.dataSource().length).toBe(1);
   });
 
   it('should navigate to new product', () => {
-    component.handleNewProduct(); // Llama al método
-    expect(navigationService.navigateTo).toHaveBeenCalledWith(['new-product']); // Verifica que se haya llamado a navigateTo con el argumento correcto
+    component.handleNewProduct();
+    expect(navigationService.navigateTo).toHaveBeenCalledWith(['new-product']);
   });
 
   it('should filter products by search value', () => {
@@ -80,7 +80,7 @@ describe('ProductsListComponent', () => {
         logo: 'logo-url',
       },
     ];
-    component.searchControl.setValue('Producto 1'); // Simula el cambio de valor en el input de búsqueda
-    expect(component.dataSource().length).toBe(1); // Verifica que se filtran los productos correctamente
+    component.searchControl.setValue('Producto 1');
+    expect(component.dataSource().length).toBe(1);
   });
 });
