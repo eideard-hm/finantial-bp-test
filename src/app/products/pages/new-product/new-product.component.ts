@@ -56,7 +56,7 @@ export default class NewProductComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(6),
+          Validators.minLength(5),
           Validators.maxLength(100),
         ],
       ],
@@ -111,7 +111,9 @@ export default class NewProductComponent implements OnInit {
     const data = this.mappedFormValues();
 
     this._financialSvc.createProduct(data).subscribe(data => {
-      console.log({ data });
+      if (data) {
+        this.redirectToList();
+      }
     });
   }
 

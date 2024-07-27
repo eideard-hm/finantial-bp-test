@@ -26,46 +26,26 @@ export class HandleHttpErrorsService {
         break;
       }
 
-      // case 400: {
-      //   this._alertSvc.dialogAccept({
-      //     title: 'Resultado de la transacción',
-      //     message: message || alertMessage,
-      //     handleConfirm: () => {},
-      //     textConfirm: 'Cerrar',
-      //   });
-      //   break;
-      // }
+      case 400: {
+        this._toastSvc.showAlert(
+          'error',
+          'Los datos enviados no son válidos. Por favor, verifique.'
+        );
+        break;
+      }
 
-      // case 401: {
-      //   this.handle401Response();
-      //   break;
-      // }
+      case 500: {
+        this._toastSvc.showAlert(
+          'error',
+          'Ocurrió un error en nuestros servicios, por favor intente más tarde.'
+        );
+        break;
+      }
 
-      // case 403: {
-      //   this.forbidenAccess();
-      //   break;
-      // }
-
-      // case 500: {
-      //   this._alertSvc.dialogAccept({
-      //     title: 'Error en el servidor',
-      //     message:
-      //       'Actualmente, tenemos problemas con nuestros servicios, comuníquese con el administrador del sistema para más información.',
-      //     handleConfirm: () => {},
-      //   });
-      //   break;
-      // }
-
-      // default: {
-      //   this._alertSvc.dialogAccept({
-      //     title: 'Error inesperado',
-      //     message:
-      //       'Ocurrió un error inesperado con nuestros servicios, por favor intente más tarde.',
-      //     handleConfirm: () => {},
-      //   });
-
-      //   break;
-      // }
+      default: {
+        this._toastSvc.showAlert('error', alertMessage);
+        break;
+      }
     }
 
     return of(defaultValue);

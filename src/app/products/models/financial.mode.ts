@@ -7,7 +7,7 @@ export interface IFinancialData {
   date_revision: Date;
 }
 
-export interface IFinancialResponse {
-  data: IFinancialData[];
+export interface IFinancialResponse<T> {
+  data: T;
   message: string;
 }
