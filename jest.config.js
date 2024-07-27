@@ -1,25 +1,13 @@
 module.exports = {
   preset: 'jest-preset-angular',
+  roots: ['src'],
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
-  testPathIgnorePatterns: [
-    '<rootDir>/node_modules/',
-    '<rootDir>/dist/',
-    '<rootDir>/src/test.ts',
-  ],
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.spec.json',
-      stringifyContentPathRegex: '\\.html$',
-    },
-  },
-  moduleFileExtensions: ['ts', 'html', 'js', 'json'],
-  transform: {
-    '^.+\\.(ts|html)$': 'ts-jest',
-  },
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
   moduleNameMapper: {
-    '@app/(.*)': '<rootDir>/src/app/$1',
-    '@environments/(.*)': '<rootDir>/src/environments/$1',
+    '^@products/(.*)$': '<rootDir>/src/app/products/$1',
+    '^@shared/(.*)$': '<rootDir>/src/app/shared/$1',
+    '^@services/(.*)$': '<rootDir>/src/app/services/$1',
+    '^@utils/(.*)$': '<rootDir>/src/app/utils/$1',
+    '^@validators/(.*)$': '<rootDir>/src/app/validators/$1',
+    '^@env/(.*)$': '<rootDir>/src/environments/$1',
   },
-  testEnvironment: 'jsdom',
 };

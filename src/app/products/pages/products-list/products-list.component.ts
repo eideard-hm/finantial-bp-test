@@ -43,14 +43,14 @@ export default class ProductsListComponent implements OnInit {
   private readonly _financialSvc = inject(FinancialService);
   private readonly _modalSvc = inject(ModalService);
 
-  private dataSourceBackup: IFinancialData[] = [];
+  public dataSourceBackup: IFinancialData[] = [];
   private _modalInfoMessage = `¿ Esta seguro/a de eliminar el producto:`;
 
-  protected isOpenModal = signal(false);
-  protected elementsPerPage = ProductConsts.DEFAULT_ELEMENTS_PER_PAGE;
-  protected searchControl = this._fb.control('');
-  protected dataSource = signal<IFinancialData[]>([]);
-  protected modalInfo = signal({
+  public isOpenModal = signal(false);
+  public elementsPerPage = ProductConsts.DEFAULT_ELEMENTS_PER_PAGE;
+  public searchControl = this._fb.control('');
+  public dataSource = signal<IFinancialData[]>([]);
+  public modalInfo = signal({
     title: `Eliminar Producto Financiero`,
     message: this._modalInfoMessage,
   });
@@ -88,17 +88,17 @@ export default class ProductsListComponent implements OnInit {
     this.dataSource.set(sliceProducts);
   }
 
-  protected handleNewProduct() {
+  public handleNewProduct() {
     this._navigationService.navigateTo(['new-product']);
   }
 
-  protected getDate(date: string): Date {
+  public getDate(date: string): Date {
     const [dateValue] = date.split('T');
     const [year, month, day] = dateValue.split('-').map(Number);
     return new Date(year, month - 1, day);
   }
 
-  protected handleElementsPerPageChage(value: number): void {
+  public handleElementsPerPageChage(value: number): void {
     this.elementsPerPage = value;
     this.dataSource.set(this.dataSourceBackup.slice(0, value));
   }
@@ -127,7 +127,7 @@ export default class ProductsListComponent implements OnInit {
     });
   }
 
-  protected buildDropdownOptions(productId: string): IDropdownOption[] {
+  public buildDropdownOptions(productId: string): IDropdownOption[] {
     return [
       {
         label: 'Editar Producto',
