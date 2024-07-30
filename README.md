@@ -1,6 +1,6 @@
 # Proyecto Angular con Signals y Arquitectura Limpia
 
-Este proyecto es una aplicación desarrollada con Angular versión 18.1.2. Utiliza señales (signals) y sigue los principios de arquitectura limpia y componetización.
+Este proyecto es una aplicación desarrollada con Angular versión 18.1.2. Utiliza señales (signals), server side rendering (SSR) y sigue los principios de arquitectura limpia y componetización.
 
 ## Tabla de Contenidos
 
@@ -12,7 +12,7 @@ Este proyecto es una aplicación desarrollada con Angular versión 18.1.2. Utili
 
 ## Descripción
 
-Esta aplicación es un ejemplo de cómo estructurar un proyecto Angular utilizando señales para la gestión de estado, y aplicando los principios de arquitectura limpia y componetización.
+Esta aplicación es un ejemplo de cómo estructurar un proyecto Angular utilizando señales para la gestión de estado, server side rendering para mejorar el rendimiento, SEO de la app y aplicando los principios de arquitectura limpia y componetización.
 
 ## Características
 
